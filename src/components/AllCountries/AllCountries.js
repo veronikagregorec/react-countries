@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Typography, Box } from "@mui/material";
 
 const AllCountries = () => {
   const [countries, setCountries] = useState([]);
@@ -14,13 +15,12 @@ const AllCountries = () => {
 
       const data = await res.json();
 
-      console.log(data);
-
       setCountries(data);
 
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+
       setError(error.message);
     }
   };
@@ -30,32 +30,28 @@ const AllCountries = () => {
   }, []);
 
   return (
-    <div className="wrap">
-      <div className="countries">
-        {isLoading && !error && <h4 className="loader"></h4>}
-        {error && !isLoading && <h4>{error}</h4>}
+    <Box className="wrap">
+      <Box className="countries">
+        {isLoading && !error && <Box className="loader"></Box>}
+        {error && !isLoading && <Typography variant="h4">{error}</Typography>}
 
-        {countries?.map((country) => (
+        {countries.map((country) => (
           <Link to={`/country/${country.name.common}`}>
-            <div className="countries-card">
-              <div className="countries-img">
+            <Box className="countries-card" key={country.toString()}>
+              <Box className="countries-img">
                 <img src={country.flags.png} alt="{country.flags.alt}" />
-              </div>
+              </Box>
 
-              <div className="countries-data">
-                <h3> {country.name.common} </h3>
-                <h6>
-                  Population:{" "}
-                  {new Intl.NumberFormat().format(country.population)}
-                </h6>
-                <h6> Region: {country.region} </h6>
-                <h6> Capital: {country.capital} </h6>
-              </div>
-            </div>
+              <Box className="countries-data">
+                <Typography variant="h3"> {country.name.common} </Typography>
+                <Typography variant="h6"> Region: {country.region} </Typography>
+                <Typography variant="h6">Capital: {country.capital}</Typography>
+              </Box>
+            </Box>
           </Link>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 export default AllCountries;
